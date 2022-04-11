@@ -8,36 +8,42 @@ import pandas
 from dotenv import load_dotenv
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-load_dotenv()
-catalog_path = os.getenv('CATALOG_PATH')
-foundation_year = os.getenv('COMPANY_FOUNDATION_YEAR')
 
-parser = argparse.ArgumentParser(
-    description='Сайт магазина авторского вина "Новое русское вино"'
-)
-parser.add_argument('-c', '--catalog', default='catalog/wine3.xlsx', help='Укажите путь к каталогу (вместе с названием файла)')
-args = parser.parse_args()
-if args.catalog:
-    catalog_path = args.catalog
+def main():
+    load_dotenv()
+    catalog_path = os.getenv('CATALOG_PATH')
+    foundation_year = os.getenv('COMPANY_FOUNDATION_YEAR')
 
-env = Environment(
-    loader=FileSystemLoader('.'),
-    autoescape=select_autoescape(['html', 'xml'])
-)
+    parser = argparse.ArgumentParser(
+        description='Сайт магазина авторского вина "Новое русское вино"'
+    )
+    parser.add_argument('-c', '--catalog', default='catalog/wine3.xlsx', help='Укажите путь к каталогу (вместе с названием файла)')
+    args = parser.parse_args()
+    if args.catalog:
+        catalog_path = args.catalog
 
-template = env.get_template('template.html')
-products = pandas.read_excel(catalog_path, sheet_name='Лист1', usecols=['Категория', 'Название', 'Сорт', 'Цена', 'Картинка', 'Акция'], na_values='None', keep_default_na=False).to_dict(orient='record')
-products_grouped = collections.defaultdict(list)
-for product in products:
-    products_grouped[product['Категория']].append(product)
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
 
-rendered_page = template.render(
-    products_grouped=products_grouped.items(),
-    company_age=datetime.datetime.now().year-foundation_year
-)
+    template = env.get_template('template.html')
+    products = pandas.read_excel(catalog_path, sheet_name='Лист1', usecols=['Категория', 'Название', 'Сорт', 'Цена', 'Картинка', 'Акция'], na_values='None', keep_default_na=False).to_dict(orient='record')
+    products_grouped = collections.defaultdict(list)
+    for product in products:
+        products_grouped[product['Категория']].append(product)
 
-with open('index.html', 'w', encoding="utf8") as file:
-    file.write(rendered_page)
+    rendered_page = template.render(
+        products_grouped=products_grouped.items(),
+        company_age=datetime.datetime.now().year-foundation_year
+    )
 
-server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+    with open('index.html', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+
+    server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+
+if __name__ == "__main__":
+    main()
