@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Сайт магазина авторского вина "Новое русское вино"'
     )
-    parser.add_argument('-c', '--catalog', default='catalog/wine3.xlsx', help='Укажите путь к каталогу (вместе с названием файла)')
+    parser.add_argument('-c', '--catalog', default='catalog/catalog.xlsx', help='Укажите путь к каталогу (вместе с названием файла)')
     args = parser.parse_args()
     if args.catalog:
         catalog_path = args.catalog
