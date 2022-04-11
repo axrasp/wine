@@ -1,8 +1,8 @@
-import datetime
-import pandas
 import collections
-
+import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 env = Environment(
@@ -11,13 +11,13 @@ env = Environment(
 )
 
 template = env.get_template('template.html')
-wines = pandas.read_excel('wine3.xlsx', sheet_name='Лист1', usecols=['Категория', 'Название', 'Сорт', 'Цена', 'Картинка', 'Акция'], na_values='None', keep_default_na=False).to_dict(orient='record')
-wine_catalog = collections.defaultdict(list)
-for wine in wines:
-    wine_catalog[wine['Категория']].append(wine)
+products = pandas.read_excel('wine3.xlsx', sheet_name='Лист1', usecols=['Категория', 'Название', 'Сорт', 'Цена', 'Картинка', 'Акция'], na_values='None', keep_default_na=False).to_dict(orient='record')
+products_grouped = collections.defaultdict(list)
+for product in products:
+    products_grouped[product['Категория']].append(product)
 
 rendered_page = template.render(
-    wine_catalog=wine_catalog.items(),
+    products_grouped=products_grouped.items(),
     company_age=datetime.datetime.now().year-1920
 )
 

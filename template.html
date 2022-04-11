@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>Wines</title>
+  <title>products</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" href="assets/favicon.ico" type="image/png">
@@ -113,32 +113,32 @@
             </p>
           </div>
         </div>
-        {% for categorise, wines in wine_catalog %}
+        {% for categorise, products in products_grouped %}
           <div class="row">
             <div class="col-12 section-title text-center mb-5">
               <h2 class="d-block">{{categorise}}</h2>
             </div>
           </div>
           <div class="row">
-          {% for wine in wines %}
+          {% for product in products %}
               <div class="col-lg-4 mb-5 col-md-6">
-                <div class="wine_v_1 text-center pb-4 pt-5">
-                  {% if wine.Акция %}
-                    <img src="images/{{wine.Картинка}}" alt="Image" class="img-fluid">
+                <div class="product_v_1 text-center pb-4 pt-5">
+                  {% if product.Акция %}
+                    <img src="images/{{product.Картинка}}" alt="Image" class="img-fluid">
                     <img src="assets/profitable.png" style="width:10rem;height: 10rem;position:absolute;right: -20px;top: -20px;">
                   {% else %}
-                    <img src="images/{{wine.Картинка}}" alt="Image" class="img-fluid">
+                    <img src="images/{{product.Картинка}}" alt="Image" class="img-fluid">
                   {% endif %}
                   <div>
-                    <h3 class="heading mt-3 mb-3 text-dark">{{wine.Название}}</h3>
-                    {% if wine.Сорт %}
+                    <h3 class="heading mt-3 mb-3 text-dark">{{product.Название}}</h3>
+                    {% if product.Сорт %}
                       <p>
-                        Сорт винограда - {{wine.Сорт}}<br/>
-                        <span class="price">{{wine.Цена}} р.</span>
+                        Сорт винограда - {{product.Сорт}}<br/>
+                        <span class="price">{{product.Цена}} р.</span>
                       </p>
                     {% else %}
                       <p>
-                        <span class="price">{{wine.Цена}} р.</span>
+                        <span class="price">{{product.Цена}} р.</span>
                       </p>
                     {% endif %}
                   </div>
