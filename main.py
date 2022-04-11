@@ -10,6 +10,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 load_dotenv()
 catalog_path = os.getenv('CATALOG_PATH')
+foundation_year = os.getenv('COMPANY_FOUNDATION_YEAR')
 
 parser = argparse.ArgumentParser(
     description='Сайт магазина авторского вина "Новое русское вино"'
@@ -32,7 +33,7 @@ for product in products:
 
 rendered_page = template.render(
     products_grouped=products_grouped.items(),
-    company_age=datetime.datetime.now().year-1920
+    company_age=datetime.datetime.now().year-foundation_year
 )
 
 with open('index.html', 'w', encoding="utf8") as file:
