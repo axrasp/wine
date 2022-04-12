@@ -12,7 +12,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 def main():
     load_dotenv()
     catalog_path = os.getenv('CATALOG_PATH')
-    foundation_year = os.getenv('COMPANY_FOUNDATION_YEAR')
+    foundation_year = int(os.getenv('COMPANY_FOUNDATION_YEAR'))
 
     parser = argparse.ArgumentParser(
         description='Сайт магазина авторского вина "Новое русское вино"'
@@ -29,12 +29,12 @@ def main():
 
     template = env.get_template('template.html')
     products = pandas.read_excel(catalog_path, sheet_name='Лист1', usecols=['Категория', 'Название', 'Сорт', 'Цена', 'Картинка', 'Акция'], na_values='None', keep_default_na=False).to_dict(orient='record')
-    products_grouped = collections.defaultdict(list)
+    grouped_products = collections.defaultdict(list)
     for product in products:
-        products_grouped[product['Категория']].append(product)
+        grouped_products[product['Категория']].append(product)
 
     rendered_page = template.render(
-        products_grouped=products_grouped.items(),
+        products_grouped=grouped_products.items(),
         company_age=datetime.datetime.now().year-foundation_year
     )
 
